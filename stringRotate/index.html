@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>String Rotation Example</title>
+
+    <style>
+        p.word {
+            font-size:5em;
+            padding-left: 10px;
+            padding-right: 10px;
+            }
+            div.left,div.right{
+                display: inline-block;
+                background: blue;
+                padding: 20px;
+                color: white;
+                cursor: pointer;
+                font-size: 2em;
+
+            }
+            div.container > *{
+                display: inline-block;
+                vertical-align: middle;
+            }
+            div.container{
+                width: 60%;
+                margin:0 auto;
+
+            }
+    </style>
+</head>
+<body>
+    <div class="row">
+        <div class="container">
+        <div class="left">&lt;</div>
+        <p class="word"></p>
+        <div class="right">&gt;</div>
+       </div>
+    </div>
+    <script>
+        let wordBox=document.querySelector('.word');
+
+        let leftButton = document.querySelector('.left');
+        let rightButton = document.querySelector('.right');
+
+        leftButton.addEventListener('click',(e)=>{
+            word=rotateLeftOnce(word);
+            wordBox.textContent=word;
+        });
+
+        rightButton.addEventListener('click',(e)=>{
+         word=rotateRightOnce(word);
+            wordBox.textContent=word;
+        });
+
+        let word="hello";
+        wordBox.textContent=word;
+
+
+
+     function rotateLeftOnce(w){
+         return w.slice(1)+w[0];
+     }
+
+     function rotate(w,numTimes){
+         for(let i=0;i<numTimes;i++)
+                w = rotateLeftOnce(w);
+           return w;
+     }
+
+
+
+     function rotateRightOnce(w){
+         return w.slice(w.length-1) + w.slice(0,w.length-1);
+     }
+
+     function rotate(w,numTimes){
+         for(let i=0;i<numTimes;i++)
+                w = rotateLeftOnce(w);
+           return w;
+     }
+
+    </script>
+</body>
+</html>
