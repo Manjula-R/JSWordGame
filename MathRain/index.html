@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Math Rain</title>
+    <style>
+        .rectangle{
+            display: inline-block;
+            margin:0 5px;
+            background-color:red;          
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+    </div>
+    <script>
+    function draw(){
+        let container = document.querySelector(".container");
+        console.log("deeeb");
+        for(let i=0;i<10;i++){
+            let r1 = new Rectangle(5*i,40);
+            container.appendChild(r1.render());            
+        }
+        // container.innerHTML =r1.render();   
+    }
+    
+    
+    class Rectangle{
+        constructor(height,width){
+            this.height = height;
+            this.width = width;
+        }
+
+        get area(){
+            return this.height * this.width;
+        }
+
+        render(){
+            let element = document.createElement("div");
+            element.style.width = this.width+"px";
+            element.style.height = this.height+"px";
+            element.classList.add("rectangle")
+            return element;
+        }
+/*
+        render(){
+            return `<div class="rectangle"></div>`
+        } */
+    }
+
+    let r1 = new Rectangle(3,2);
+    console.log(r1.height,r1.width);
+    console.log(r1.area);
+    draw();
+    </script>
+</body>
+</html>

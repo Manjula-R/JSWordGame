@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Main</title>
+    <style>
+    div.container{
+        position:relative;
+    }
+    div.drop{
+        position:absolute;
+        background-image: url("assets/drop.jpg");
+        background-size: cover;
+        width:100px;
+        height:100px;
+        padding-top:50px;
+        text-align:center;
+        display: inline-block;
+    }
+    </style>
+</head>
+<body>
+    <div class="container">
+            <div id="player">
+                    <audio autoplay hidden>
+                     <source src="assets/Ringtone.mp3" type="audio/mpeg">
+                                If you're reading this, audio isn't supported. 
+                    </audio>
+                </div>
+
+    </div>
+    <script>
+    class Drop{
+        constructor(operand1,operator,operand2){
+            this.operand1 = operand1;
+            this.operand2 = operand2;
+            this.operator = operator;
+            this.top = 0;
+            this.result = Math.trunc(Math.abs(eval(this.operand1 + this.operator + this.operand2)));
+        }
+
+        move(){
+            this.top += 5;
+            this.element.style.top = this.top+"px";
+        }
+
+        render(parent,top,left){
+         this.element = document.createElement("div");
+         this.element.classList.add("drop");
+         this.element.style.top = top+"px";
+         this.element.style.left = left+"px";
+         
+         this.element.innerHTML = `
+            <div class="operand">${this.operand1}</div>
+            <div class="operator">${this.operator}</div>
+            <div class="operand">${this.operand2}</div>
+         `;
+         parent.appendChild(this.element);
+
+        }
+    }
+
+    class Game{
+        constructor(maxDrops,container){
+            this.maxDrops = maxDrops;
+            this.drops = [];
+            this.expr = "";
+            this.container = container;
+            this.utils = this.setUpUtils();
+            this.setUpKeyHandling();
+        }
+
+        toString(){         //to call the property defined by the object
+            return "game";
+        }
+
+        start(){
+            setInterval(()=>{
+            if (this.drops.length < 10){
+                let drop = new Drop(this.utils.genOperand(),
+                                this.utils.genOperator(),
+                                this.utils.genOperand());
+                drop.render(this.container,0,this.utils.getDropPosition());
+                this.drops.push(drop);
+            }
+                this.drops.forEach(drop => drop.move());
+
+            },100);
+
+        }
+
+        markForRemoval(drop){
+            drop.element.innerHTML="";
+            drop.element.style.backgroundImage ="url(`assets/splash.jpg`)";
+            setTimeout(()=>{
+                this.container.removeChild(drop.element);
+            },10);
+        }
+
+        updateDrops(result){
+            this.drops = this.drops.map(drop =>{
+                if(drop.result == result)
+                    this.markForRemoval(drop)
+                return drop;
+            }).filter(drop => drop.result != result);
+        }
+
+        setUpKeyHandling(){
+            document.addEventListener('keypress',(event)=>{
+                if(event.key=="Enter"){
+                    this.updateDrops(this.expr);
+                    this.expr="";
+                }
+                else    
+                    this.expr += event.key;
+            })
+        }
+        
+        setUpUtils(){
+            return {
+                genOperand : () => Math.round(Math.random()*10),
+                genOperator : () => ['+','-','*','/'][Math.round(Math.random()*10)%4],
+                getDropPosition : () => Math.round(Math.random()*1000)%(window.innerWidth)
+            };
+        }
+    }
+
+   // function setUpKeyPress(){
+       // document.addEventListener('')
+    //}
+
+    window.onload = function(){
+       /* let genOperand = () => Math.round(Math.random()*100);
+        let genOperator = () => ['+','-','*','/'][Math.round(Math.random()*10)%4];
+
+        let getDropPosition = () => Math.round(Math.random()*1000)%(window.innerWidth);*/
+
+
+        let drops = [];
+        let game = new Game(10,document.querySelector(".container"));
+        game.start();
+    }
+    </script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Main</title>
+    <style>
+    div.container{
+        position:relative;
+    }
+    div.drop{
+        position:absolute;
+        background-image: url("drop.jpg");
+        background-size: cover;
+        width:100px;
+        height:100px;
+        padding-top:50px;
+        text-align:center;
+        display: inline-block;
+    }
+    </style>
+</head>
+<body>
+    <div class="container">
+       
+    </div>
+    <script>
+    class Drop{
+        constructor(operand1,operator,operand2){
+            this.operand1 = operand1;
+            this.operand2 = operand2;
+            this.operator = operator;
+            this.top = 0;
+        }
+
+        move(){
+            this.top += 5;
+            this.element.style.top = this.top+"px";
+        }
+
+        render(parent,top,left){
+         this.element = document.createElement("div");
+         this.element.classList.add("drop");
+         this.element.style.top = top+"px";
+         this.element.style.left = left+"px";
+         
+         this.element.innerHTML = `
+            <div class="operand">${this.operand1}</div>
+            <div class="operator">${this.operator}</div>
+            <div class="operand">${this.operand2}</div>
+         `;
+         parent.appendChild(this.element);
+
+        }
+    }
+
+    window.onload = function(){
+        let genOperand = () => Math.round(Math.random()*100);
+        let genOperator = () => ['+','-','*','/'][Math.round(Math.random()*10)%4];
+
+        let getDropPosition = () => Math.round(Math.random()*1000)%(window.innerWidth);
+
+
+        let drops = [];
+        let container = document.querySelector(".container");
+        setInterval(function(){
+            if (drops.length < 10){
+                let drop = new Drop(genOperand(),
+                                genOperator(),
+                                genOperand());
+                drop.render(container,0,getDropPosition());
+                drops.push(drop);
+            }
+            drops.forEach(drop => drop.move());
+            // console.log(this);
+            // setTimeout(this,50);
+        },50);
+    }
+    </script>
+</body>
+</html>
